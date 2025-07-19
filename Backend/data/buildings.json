@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Business Leadership Building",
+    "coords": [33.2095, -97.1499],
+    "description": "Home to the G. Brint Ryan College of Business"
+  },
+  {
+    "name": "Willis Library",
+    "coords": [33.2101, -97.1495],
+    "description": "Main library at UNT, open 24/7 during finals"
+  },
+  {
+    "name": "Union Building",
+    "coords": [33.2108, -97.1508],
+    "description": "Student center with dining, bookstore, and lounges"
+  },
+  {
+    "name": "Discovery Park",
+    "coords": [33.2530, -97.1525],
+    "description": "Engineering and Computer Science campus"
+  },
+  {
+    "name": "Pohl Recreation Center",
+    "coords": [33.2086, -97.1532],
+    "description": "Gym, swimming pool, and wellness center"
+  }
+]

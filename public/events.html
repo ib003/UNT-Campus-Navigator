@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events | UNT Campus Navigator</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #222;
+    }
+
+    header {
+      background-color: #006A4E;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #e9ecef;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #006A4E;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #006A4E;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .event {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #006A4E;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 5px;
+    }
+
+    .event h3 {
+      margin-top: 0;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 15px;
+      background-color: #f1f1f1;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .dark-theme {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+
+    .dark-theme .event,
+    .dark-theme nav,
+    .dark-theme header,
+    .dark-theme footer {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+    }
+
+    .high-contrast {
+      background-color: black !important;
+      color: yellow !important;
+    }
+
+    .high-contrast .event,
+    .high-contrast nav,
+    .high-contrast header,
+    .high-contrast footer {
+      background-color: black !important;
+      color: yellow !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Campus Events</h1>
+    <p>Stay up to date with what's happening at UNT</p>
+  </header>
+
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="map_update.html">🗺️ Map</a>
+    <a href="search_page.html">🔍 Search</a>
+    <a href="events.html">📅 Events</a>
+    <a href="saved.html">⭐ Saved</a>
+    <a href="settings.html">⚙️ Settings</a>
+  </nav>
+
+  <main>
+    <h2>This Week’s Featured Events</h2>
+
+    <div class="event">
+      <h3>🎶 Music Fest at Bruce Hall</h3>
+      <p><strong>Date:</strong> July 20, 2025</p>
+      <p><strong>Location:</strong> Bruce Courtyard</p>
+      <p>Join UNT bands and student performers for a fun evening of music, food trucks, and community!</p>
+    </div>
+
+    <div class="event">
+      <h3>📚 Library Midnight Study Jam</h3>
+      <p><strong>Date:</strong> July 22–25, 2025</p>
+      <p><strong>Location:</strong> Willis Library</p>
+      <p>Extended hours, free snacks, and tutoring help all night before finals. Don’t miss out!</p>
+    </div>
+
+    <div class="event">
+      <h3>🚶 Campus Sustainability Tour</h3>
+      <p><strong>Date:</strong> July 23, 2025 at 2:00 PM</p>
+      <p><strong>Location:</strong> Starts at Union Green</p>
+      <p>Learn how UNT is going green! Guided tour of eco-friendly buildings and practices.</p>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 UNT Campus Navigator | Designed by Isha
+  </footer>
+
+  <script src="settings.js"></script>
+</body>
+</html>

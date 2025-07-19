@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Buildings</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #searchBar {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result0 {
+      margin-top: 15px;
+      color: #006A4E;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Search Campus Buildings</h1>
+  <input type="text" id="searchBar" placeholder="Type a building name..." autocomplete="off">
+  <p id="result0"></p>
+
+  <script>
+    const buildings = [
+      "Business Leadership Building",
+      "Willis Library",
+      "Union Building",
+      "Discovery Park",
+      "Pohl Recreation Center",
+      "Sage Hall",
+      "Murchison Performing Arts Center",
+      "Bruce Hall",
+      "Kerr Hall",
+      "Gateway Center",
+      "EESAT",
+      "GAB (General Academic Building)",
+      "Art Building",
+      "Language Building",
+      "Life Science Complex"
+    ];
+
+    const searchInput = document.getElementById("searchBar");
+    const result = document.getElementById("result0");
+
+    searchInput.addEventListener("input", function () {
+      const input = searchInput.value.toLowerCase();
+      const match = buildings.find(b => b.toLowerCase().includes(input));
+
+      if (match) {
+        result.innerText = `➡ View on map: ${match}`;
+        result.style.color = "blue";
+        result.onclick = () => {
+          const query = encodeURIComponent(match);
+          window.location.href = `map_update.html?building=${query}`;
+        };
+      } else {
+        result.innerText = "No match found.";
+        result.style.color = "red";
+        result.onclick = null;
+      }
+    });
+  </script>
+</body>
+</html>

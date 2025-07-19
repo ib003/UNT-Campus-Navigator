@@ -1,68 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UNT Campus Map</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; }
-    h2 { text-align: center; padding: 10px; background-color: #006A4E; color: white; margin: 0; }
-    #map { height: 95vh; width: 100%; }
-    .leaflet-popup-content button {
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
       background-color: #006A4E;
       color: white;
-      border: none;
-      padding: 6px 12px;
-      margin-top: 5px;
-      cursor: pointer;
-      border-radius: 4px;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 15px;
+    }
+    #map {
+      height: 92vh;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
-<h2>UNT Campus Map</h2>
-<div id="map"></div>
+  <nav>
+    <div><strong>UNT Campus Map</strong></div>
+    <div>
+      <a href="index.html">🏠 Home</a>
+      <a href="search_page.html">🔍 Search</a>
+    </div>
+  </nav>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <div id="map"></div>
 
-<script>
-  var map = L.map('map').setView([33.2106, -97.1503], 16);
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([33.2106, -97.1503], 16);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-  const buildings = [
-    { name: "Business Leadership Building", coords: [33.2095, -97.1499], description: "College of Business" },
-    { name: "Willis Library", coords: [33.2101, -97.1495], description: "24/7 Library during finals" },
-    { name: "Union Building", coords: [33.2108, -97.1508], description: "Student union, food court, bookstore" },
-    { name: "Discovery Park", coords: [33.2530, -97.1525], description: "Engineering and CS campus (off main)" }
-  ];
+    const buildings = [
+      { name: "Business Leadership Building", coords: [33.2095, -97.1499], description: "College of Business" },
+      { name: "Willis Library", coords: [33.2101, -97.1495], description: "24/7 Library during finals" },
+      { name: "Union Building", coords: [33.2108, -97.1508], description: "Student union, food court, bookstore" },
+      { name: "Discovery Park", coords: [33.2530, -97.1525], description: "Engineering and CS campus (off main)" },
+      { name: "Pohl Recreation Center", coords: [33.2086, -97.1532], description: "Gym and indoor pool" },
+      { name: "Sage Hall", coords: [33.2117, -97.1478], description: "Student services and advising" },
+      { name: "Bruce Hall", coords: [33.2102, -97.1535], description: "Residence hall known for music majors" },
+      { name: "Kerr Hall", coords: [33.2076, -97.1486], description: "Freshman residence hall" },
+      { name: "Gateway Center", coords: [33.2082, -97.1536], description: "Event and visitor center" },
+      { name: "Life Science Complex", coords: [33.2120, -97.1487], description: "Biology & research labs" }
+    ];
 
-  buildings.forEach(b => {
-    const marker = L.marker(b.coords).addTo(map);
-    marker.bindPopup(`
-      <b>${b.name}</b><br>${b.description}<br>
-      <button onclick="savePlace('${b.name}', '${b.description}')">Save</button>
-    `);
-  });
+    buildings.forEach(b => {
+      L.marker(b.coords).addTo(map)
+        .bindPopup(`<b>${b.name}</b><br>${b.description}`);
+    });
+  </script>
 
-  function savePlace(name, description) {
-    let saved = JSON.parse(localStorage.getItem('savedPlaces')) || [];
-    if (!saved.find(p => p.name === name)) {
-      saved.push({ name, description });
-      localStorage.setItem('savedPlaces', JSON.stringify(saved));
-      alert(`${name} saved!`);
-    } else {
-      alert(`${name} is already saved.`);
-    }
-  }
-</script>
-
-<script src="settings.js"></script>
 </body>
 </html>

@@ -1,75 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UNT Campus Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    nav {
+    body { margin: 0; font-family: Arial, sans-serif; }
+    h2 { text-align: center; padding: 10px; background-color: #006A4E; color: white; margin: 0; }
+    #map { height: 95vh; width: 100%; }
+    .leaflet-popup-content button {
       background-color: #006A4E;
       color: white;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      margin-left: 15px;
-    }
-    #map {
-      height: 92vh;
-      width: 100%;
+      border: none;
+      padding: 6px 12px;
+      margin-top: 5px;
+      cursor: pointer;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div><strong>UNT Campus Map</strong></div>
-    <div>
-      <a href="index.html">🏠 Home</a>
-      <a href="search_page.html">🔍 Search</a>
-    </div>
-  </nav>
+<h2>UNT Campus Map</h2>
+<div id="map"></div>
 
-  <div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const buildings = [
+    { name: "Business Leadership Building", coords: [33.2095, -97.1499], description: "College of Business" },
+    { name: "Willis Library", coords: [33.2101, -97.1495], description: "24/7 Library during finals" },
+    { name: "Union Building", coords: [33.2108, -97.1508], description: "Student union, food court, bookstore" },
+    { name: "Discovery Park", coords: [33.2530, -97.1525], description: "Engineering and CS campus (off main)" },
+    { name: "Pohl Recreation Center", coords: [33.2086, -97.1532], description: "Gym and indoor pool" },
+    { name: "Sage Hall", coords: [33.2117, -97.1478], description: "Home to multiple student services" },
+    { name: "Murchison Performing Arts Center", coords: [33.2132, -97.1522], description: "Concert and recital halls" },
+    { name: "Bruce Hall", coords: [33.2102, -97.1535], description: "Residence hall known for music majors" },
+    { name: "Kerr Hall", coords: [33.2076, -97.1486], description: "Freshman residence hall" },
+    { name: "Gateway Center", coords: [33.2082, -97.1536], description: "Event space and visitor center" },
+    { name: "EESAT", coords: [33.2128, -97.1464], description: "Environmental sciences building" },
+    { name: "GAB (General Academic Building)", coords: [33.2109, -97.1473], description: "Home to core academic classes" },
+    { name: "Art Building", coords: [33.2102, -97.1524], description: "Visual arts and studio classes" },
+    { name: "Language Building", coords: [33.2103, -97.1482], description: "World Languages, Linguistics" },
+    { name: "Life Science Complex", coords: [33.2120, -97.1487], description: "Biology & research labs" }
+  ];
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const map = L.map('map').setView([33.2106, -97.1503], 16);
+  const saved = JSON.parse(localStorage.getItem("savedPlaces") || "[]");
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+  const map = L.map('map').setView([33.2106, -97.1503], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 
-    const buildings = [
-      { name: "Business Leadership Building", coords: [33.2095, -97.1499], description: "College of Business" },
-      { name: "Willis Library", coords: [33.2101, -97.1495], description: "24/7 Library during finals" },
-      { name: "Union Building", coords: [33.2108, -97.1508], description: "Student union, food court, bookstore" },
-      { name: "Discovery Park", coords: [33.2530, -97.1525], description: "Engineering and CS campus (off main)" },
-      { name: "Pohl Recreation Center", coords: [33.2086, -97.1532], description: "Gym and indoor pool" },
-      { name: "Sage Hall", coords: [33.2117, -97.1478], description: "Student services and advising" },
-      { name: "Bruce Hall", coords: [33.2102, -97.1535], description: "Residence hall known for music majors" },
-      { name: "Kerr Hall", coords: [33.2076, -97.1486], description: "Freshman residence hall" },
-      { name: "Gateway Center", coords: [33.2082, -97.1536], description: "Event and visitor center" },
-      { name: "Life Science Complex", coords: [33.2120, -97.1487], description: "Biology & research labs" }
-    ];
+  let focus = JSON.parse(localStorage.getItem("focusBuilding") || "null");
+  let focusMarker = null;
 
-    buildings.forEach(b => {
-      L.marker(b.coords).addTo(map)
-        .bindPopup(`<b>${b.name}</b><br>${b.description}`);
-    });
-  </script>
+  buildings.forEach(b => {
+    const isSaved = saved.some(p => p.name === b.name);
+    const btn = isSaved
+      ? `<button onclick="removePlace('${b.name}')">Remove</button>`
+      : `<button onclick="savePlace('${b.name}', '${b.description}')">Save</button>`;
+    const marker = L.marker(b.coords).addTo(map).bindPopup(`
+      <b>${b.name}</b><br>${b.description}<br>${btn}
+    `);
 
+    if (focus && b.name === focus.name) {
+      focusMarker = marker;
+    }
+  });
+
+  if (focusMarker) {
+    map.setView(focusMarker.getLatLng(), 18);
+    focusMarker.openPopup();
+    localStorage.removeItem("focusBuilding");
+  }
+
+  function savePlace(name, description) {
+    const saved = JSON.parse(localStorage.getItem("savedPlaces") || "[]");
+    if (!saved.find(p => p.name === name)) {
+      saved.push({ name, description });
+      localStorage.setItem("savedPlaces", JSON.stringify(saved));
+      alert(name + " saved!");
+      location.reload();
+    }
+  }
+
+  function removePlace(name) {
+    let saved = JSON.parse(localStorage.getItem("savedPlaces") || "[]");
+    saved = saved.filter(p => p.name !== name);
+    localStorage.setItem("savedPlaces", JSON.stringify(saved));
+    alert(name + " removed.");
+    location.reload();
+  }
+</script>
+
+<script src="settings.js"></script>
 </body>
 </html>

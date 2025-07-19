@@ -2,71 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Search Buildings</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-    #searchBar {
+
+    input {
+      padding: 8px;
       width: 100%;
-      padding: 10px;
       font-size: 16px;
     }
-    #result0 {
-      margin-top: 15px;
-      color: #006A4E;
-      font-weight: bold;
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f2f2f2;
+      border-radius: 5px;
       cursor: pointer;
+    }
+
+    li:hover {
+      background-color: #ddd;
     }
   </style>
 </head>
 <body>
-  <h1>Search Campus Buildings</h1>
-  <input type="text" id="searchBar" placeholder="Type a building name..." autocomplete="off">
-  <p id="result0"></p>
 
-  <script>
-    const buildings = [
-      "Business Leadership Building",
-      "Willis Library",
-      "Union Building",
-      "Discovery Park",
-      "Pohl Recreation Center",
-      "Sage Hall",
-      "Murchison Performing Arts Center",
-      "Bruce Hall",
-      "Kerr Hall",
-      "Gateway Center",
-      "EESAT",
-      "GAB (General Academic Building)",
-      "Art Building",
-      "Language Building",
-      "Life Science Complex"
-    ];
+<h1>Search Buildings</h1>
+<input type="text" id="searchInput" placeholder="Search for a building...">
+<ul id="results"></ul>
 
-    const searchInput = document.getElementById("searchBar");
-    const result = document.getElementById("result0");
+<script>
+  const buildings = [
+    { name: "Business Leadership Building", coords: [33.2095, -97.1499], description: "College of Business" },
+    { name: "Willis Library", coords: [33.2101, -97.1495], description: "24/7 Library during finals" },
+    { name: "Union Building", coords: [33.2108, -97.1508], description: "Student union, food court, bookstore" },
+    { name: "Discovery Park", coords: [33.2530, -97.1525], description: "Engineering and CS campus (off main)" },
+    { name: "Gateway Center", coords: [33.2082, -97.1536], description: "Event space and visitor center" }
+  ];
 
-    searchInput.addEventListener("input", function () {
-      const input = searchInput.value.toLowerCase();
-      const match = buildings.find(b => b.toLowerCase().includes(input));
+  const input = document.getElementById('searchInput');
+  const results = document.getElementById('results');
 
-      if (match) {
-        result.innerText = `➡ View on map: ${match}`;
-        result.style.color = "blue";
-        result.onclick = () => {
-          const query = encodeURIComponent(match);
-          window.location.href = `map_update.html?building=${query}`;
-        };
-      } else {
-        result.innerText = "No match found.";
-        result.style.color = "red";
-        result.onclick = null;
-      }
+  input.addEventListener('input', () => {
+    const query = input.value.toLowerCase();
+    results.innerHTML = '';
+
+    const matches = buildings.filter(b => b.name.toLowerCase().includes(query));
+    matches.forEach(b => {
+      const li = document.createElement('li');
+      li.textContent = b.name;
+      li.onclick = () => {
+        localStorage.setItem('focusBuilding', JSON.stringify(b));
+        window.location.href = 'map_update.html';
+      };
+      results.appendChild(li);
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>

@@ -3,91 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Saved Places | UNT Campus Navigator</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Saved Places</title>
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #222; }
-    header, nav, footer { text-align: center; padding: 15px; }
-    header { background-color: #006A4E; color: white; }
-    nav { background-color: #e9ecef; }
-    nav a { margin: 0 15px; color: #006A4E; font-weight: bold; text-decoration: none; }
-    main { max-width: 800px; margin: 30px auto; padding: 10px; }
-    .saved-place {
-      background: white; padding: 15px; margin-bottom: 10px;
-      border-left: 4px solid #006A4E; border-radius: 5px;
-      position: relative;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: white;
+      color: #222;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
     }
-    .remove-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: red;
+
+    h1 {
+      text-align: center;
+      color: #006A4E;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #f2f2f2;
+      margin-bottom: 12px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      background-color: #c62828;
       color: white;
       border: none;
-      padding: 5px 10px;
+      padding: 6px 12px;
       cursor: pointer;
       border-radius: 4px;
+      float: right;
     }
-    .dark-theme, .dark-theme .saved-place { background-color: #121212; color: #f0f0f0; }
-    .high-contrast { background-color: black !important; color: yellow !important; }
+
+    .dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+    .dark-mode li {
+      background-color: #1e1e1e;
+    }
+
+    .dark-mode button {
+      background-color: #e53935;
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Saved Places</h1>
-  <p>Your bookmarked campus buildings</p>
-</header>
-
-<nav>
-  <a href="index.html">🏠 Home</a>
-  <a href="map_update.html">🗺️ Map</a>
-  <a href="search_page.html">🔍 Search</a>
-  <a href="events.html">📅 Events</a>
-  <a href="saved.html">⭐ Saved</a>
-  <a href="settings.html">⚙️ Settings</a>
-</nav>
-
-<main>
-  <h2>Bookmarked Locations</h2>
-  <div id="savedContainer"></div>
-</main>
-
-<footer>© 2025 UNT Campus Navigator</footer>
+<h1>Saved Places</h1>
+<ul id="savedList"></ul>
 
 <script>
-  function renderSavedPlaces() {
+  function loadSavedPlaces() {
     const saved = JSON.parse(localStorage.getItem('savedPlaces')) || [];
-    const container = document.getElementById('savedContainer');
-    container.innerHTML = '';
+    const list = document.getElementById('savedList');
+    list.innerHTML = '';
 
     if (saved.length === 0) {
-      container.innerHTML = "<p>No saved places yet.</p>";
+      list.innerHTML = '<p>No places saved yet.</p>';
       return;
     }
 
     saved.forEach((place, index) => {
-      const div = document.createElement('div');
-      div.className = 'saved-place';
-      div.innerHTML = `
-        <h3>${place.name}</h3>
-        <p>${place.description}</p>
-        <button class="remove-btn" onclick="removePlace(${index})">Remove</button>
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <strong>${place.name}</strong><br>${place.description}
+        <button onclick="removePlace(${index})">Remove</button>
       `;
-      container.appendChild(div);
+      list.appendChild(li);
     });
   }
 
   function removePlace(index) {
     let saved = JSON.parse(localStorage.getItem('savedPlaces')) || [];
-    saved.splice(index, 1);
+    const removed = saved.splice(index, 1);
     localStorage.setItem('savedPlaces', JSON.stringify(saved));
-    renderSavedPlaces();
+    alert(`${removed[0].name} removed from saved places.`);
+    loadSavedPlaces();
   }
 
-  renderSavedPlaces();
+  // Dark mode check from localStorage
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
+
+  loadSavedPlaces();
 </script>
 
-<script src="settings.js"></script>
 </body>
 </html>
